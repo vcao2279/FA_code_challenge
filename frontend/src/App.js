@@ -37,8 +37,12 @@ class App extends Component {
     let currentEmail;
     users.forEach(user => {
       if (user.id === rowData.id) {
-        currentEmail = rowData.email;
-        currentPhone = rowData.phone;
+        currentEmail = this.state.currentEmail
+          ? this.state.currentEmail
+          : rowData.email;
+        currentPhone = this.state.currentPhone
+          ? this.state.currentPhone
+          : rowData.phone;
 
         user.phone = (
           <input
@@ -60,10 +64,22 @@ class App extends Component {
   };
 
   updateRow = async (e, rowData) => {
+    let phone = this.state.newPhone || this.state.currentPhone;
+    let email = this.state.newEmail || this.state.currentEmail;
+    phone = typeof phone === "string" ? phone : "";
+    email = typeof email === "string" ? email : "";
+
+    if (
+      (phone && !this.validatePhone(phone)) ||
+      (email && !this.validateEmail(email))
+    ) {
+      return alert("Please enter valid phone and email");
+    }
+
     const updatedRow = {
       userId: rowData.id,
-      phone: this.state.newPhone || this.state.currentPhone,
-      email: this.state.newEmail || this.state.currentEmail
+      phone,
+      email
     };
 
     const { data } = await axios.post("http://localhost:5000", updatedRow);
@@ -88,6 +104,16 @@ class App extends Component {
       currentPhone: "",
       currentEmail: ""
     });
+  };
+
+  validateEmail = email => {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email.toLowerCase());
+  };
+
+  validatePhone = phone => {
+    var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+    return re.test(phone);
   };
 
   render() {
