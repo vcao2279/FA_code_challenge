@@ -59,6 +59,37 @@ class App extends Component {
     this.setState({ users, currentEmail, currentPhone });
   };
 
+  updateRow = async (e, rowData) => {
+    const updatedRow = {
+      userId: rowData.id,
+      phone: this.state.newPhone || this.state.currentPhone,
+      email: this.state.newEmail || this.state.currentEmail
+    };
+
+    const { data } = await axios.post("http://localhost:5000", updatedRow);
+    const newRows = this.state.users.map(row => {
+      if (row.id === rowData.id) {
+        return {
+          id: data[0].id,
+          name: data[0].name,
+          phone: data[0].phone,
+          email: data[0].email,
+          tableData: row.tableData
+        };
+      } else {
+        return row;
+      }
+    });
+
+    this.setState({
+      users: newRows,
+      newPhone: "",
+      newEmail: "",
+      currentPhone: "",
+      currentEmail: ""
+    });
+  };
+
   render() {
     return (
       <div className="App">
