@@ -13,7 +13,7 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    const { data } = await axios.get("http://localhost:5000");
+    const { data } = await axios.get("https://fa-challenge.herokuapp.com/");
     const rowsData = data.map(row => {
       return {
         id: row.id,
@@ -82,7 +82,10 @@ class App extends Component {
       email
     };
 
-    const { data } = await axios.post("http://localhost:5000", updatedRow);
+    const { data } = await axios.post(
+      "https://fa-challenge.herokuapp.com/",
+      updatedRow
+    );
     const newRows = this.state.users.map(row => {
       if (row.id === rowData.id) {
         return {
