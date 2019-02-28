@@ -9,7 +9,8 @@ class App extends Component {
     newPhone: "",
     newEmail: "",
     currentPhone: "",
-    currentEmail: ""
+    currentEmail: "",
+    isLoading: true
   };
 
   async componentDidMount() {
@@ -24,7 +25,7 @@ class App extends Component {
       };
     });
 
-    this.setState({ users: rowsData });
+    this.setState({ users: rowsData, isLoading: false });
   }
 
   changeHandler = async e => {
@@ -123,6 +124,7 @@ class App extends Component {
     return (
       <div className="App">
         <MaterialTable
+          isLoading={this.state.isLoading}
           columns={[
             {
               title: "Name",
