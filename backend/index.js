@@ -29,6 +29,15 @@ app.get("/", async (req, res) => {
       // Insert names into database
       await db.batchInsert("users", names);
     }
+
+    // Get random 100 names from table
+    const randomNames = await db
+      .select("*")
+      .from("users")
+      .orderByRaw("RANDOM()")
+      .limit(100);
+
+    res.json(randomNames);
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
