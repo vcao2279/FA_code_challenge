@@ -31,6 +31,34 @@ class App extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  editRow = (e, rowData) => {
+    const users = [...this.state.users];
+    let currentPhone;
+    let currentEmail;
+    users.forEach(user => {
+      if (user.id === rowData.id) {
+        currentEmail = rowData.email;
+        currentPhone = rowData.phone;
+
+        user.phone = (
+          <input
+            name="newPhone"
+            placeholder="enter phone number"
+            onChange={e => this.changeHandler(e, rowData.id)}
+          />
+        );
+        user.email = (
+          <input
+            name="newEmail"
+            placeholder="enter email"
+            onChange={e => this.changeHandler(e, rowData.id)}
+          />
+        );
+      }
+    });
+    this.setState({ users, currentEmail, currentPhone });
+  };
+
   render() {
     return (
       <div className="App">
