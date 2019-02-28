@@ -1,10 +1,11 @@
 const express = require("express");
 const axios = require("axios");
 const db = require("./database/dbConfig");
-
+const cors = require("cors");
 const app = express();
 
 app.use(express.json());
+app.use(cors({ origin: true }));
 
 app.get("/", async (req, res) => {
   try {
@@ -45,12 +46,10 @@ app.get("/", async (req, res) => {
 
 app.post("/", async (req, res) => {
   const { userId, phone, email } = req.body;
-  console.log(userId, phone, email);
   try {
     await db("users")
-      .returning("id")
       .where({ id: userId })
-      .update({ phone: phone, email: email }, ["id", "name", "phone", "email"]);
+      .update({ phone: phone, email: email });
 
     const updatedUser = await db("users")
       .select("*")
