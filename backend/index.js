@@ -43,6 +43,25 @@ app.get("/", async (req, res) => {
   }
 });
 
+app.post("/", async (req, res) => {
+  const { userId, phone, email } = req.body;
+  console.log(userId, phone, email);
+  try {
+    await db("users")
+      .returning("id")
+      .where({ id: userId })
+      .update({ phone: phone, email: email }, ["id", "name", "phone", "email"]);
+
+    const updatedUser = await db("users")
+      .select("*")
+      .where({ id: userId });
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 const PORT = 5000;
 
 app.listen(PORT, () => console.log(`Server running at port ${PORT}`));
