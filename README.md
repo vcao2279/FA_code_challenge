@@ -11,3 +11,5 @@
 6. Add a search function to the table.
 
 7. Add a button that allows you to export the table data to a .csv download file. The .csv file should reflect the current status of the table (including sort order and search results).
+
+Deployed to https://fa-challenge.netlify.com/
